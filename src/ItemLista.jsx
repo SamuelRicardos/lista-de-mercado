@@ -10,9 +10,9 @@ const ItemLista = ({itemLista, listaMercado, setListaMercado}) => {
     }
 
     return (
-        <li>
+        <li className="flex justify-between gap-2">
             <p>{itemLista}</p>
-            <button onClick={() => removerItemDaLista()}>Remover</button>
+            <button className="transition rounded-md bg-red-600 text-white px-2 cursor-pointer hover:bg-red-700" onClick={() => removerItemDaLista()}>Remover</button>
         </li>
     )
 }
