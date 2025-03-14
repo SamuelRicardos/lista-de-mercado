@@ -20,7 +20,7 @@ function App() {
   }
 
   return <>
-    <h1>Lista de mercado</h1>
+    <h1 className="text-3xl font-bold">Lista de mercado</h1>
     <input ref={inputAdicionar} type="text" placeholder="Digite um item" />
     <button onClick={() => adicionarElementoNaLista()}>Adicionar</button>
 
