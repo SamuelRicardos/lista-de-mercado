@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+:root {
+  --bg-light: #f4f4f4;
+  --text-light: #1a202c;
+  --bg-dark: #1a202c;
+  --text-dark: #f4f4f4;
+}
+
+body {
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+}
+
 @keyframes fadeIn {
     from {
       opacity: 0;
