@@ -1,22 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Pencil, Trash2, Check, X } from "lucide-react";
+import { useMercadoStore } from "./store/store";
 
-const ItemLista = ({ itemLista, listaMercado, setListaMercado }) => {
+const ItemLista = ({ itemLista }) => {
+  const { removerItem, atualizarItem } = useMercadoStore();
   const [editing, setEditing] = useState(false);
   const [valorEditado, setValorEditado] = useState(itemLista);
   const inputRef = useRef(null);
 
-  const removerItemDaLista = () => {
-    setListaMercado(listaMercado.filter((itemAtual) => itemAtual !== itemLista));
-  };
-
-  const iniciarEdicao = () => {
-    setEditing(true);
-  };
+  const iniciarEdicao = () => setEditing(true);
 
   const salvarEdicao = () => {
     if (valorEditado.trim() !== "") {
-      setListaMercado(listaMercado.map(item => item === itemLista ? valorEditado : item));
+      atualizarItem(itemLista, valorEditado);
       setEditing(false);
     }
   };
@@ -26,7 +22,6 @@ const ItemLista = ({ itemLista, listaMercado, setListaMercado }) => {
     setEditing(false);
   };
 
-  // Foca o input ao entrar no modo de edição
   useEffect(() => {
     if (editing && inputRef.current) {
       inputRef.current.focus();
@@ -42,11 +37,8 @@ const ItemLista = ({ itemLista, listaMercado, setListaMercado }) => {
           value={valorEditado}
           onChange={(e) => setValorEditado(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              salvarEdicao();
-            } else if (e.key === "Escape") {
-              cancelarEdicao();
-            }
+            if (e.key === "Enter") salvarEdicao();
+            else if (e.key === "Escape") cancelarEdicao();
           }}
           className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
@@ -87,7 +79,7 @@ const ItemLista = ({ itemLista, listaMercado, setListaMercado }) => {
           </button>
           <button
             className="transition p-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 shadow-md cursor-pointer"
-            onClick={removerItemDaLista}
+            onClick={() => removerItem(itemLista)}
             aria-label={`Remover ${itemLista} da lista`}
           >
             <Trash2 size={18} />

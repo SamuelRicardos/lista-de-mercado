@@ -1,16 +1,17 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { useMercadoStore } from "./store/store";
 import ItemLista from "./ItemLista";
 import { Plus } from "lucide-react";
 import "./index.css";
 
 function App() {
-  const [listaMercado, setListaMercado] = useState([]);
   const inputAdicionar = useRef();
+  const { listaMercado, adicionarItem } = useMercadoStore();
 
   const adicionarElementoNaLista = () => {
     const valorInput = inputAdicionar.current.value.trim();
     if (valorInput && !listaMercado.includes(valorInput)) {
-      setListaMercado([...listaMercado, valorInput]);
+      adicionarItem(valorInput);
       inputAdicionar.current.value = "";
     }
   };
@@ -41,11 +42,7 @@ function App() {
               key={index}
               className="flex justify-between items-center bg-gray-100 p-2 rounded-lg shadow-md fade-in"
             >
-              <ItemLista
-                itemLista={itemLista}
-                listaMercado={listaMercado}
-                setListaMercado={setListaMercado}
-              />
+              <ItemLista itemLista={itemLista} />
             </li>
           ))}
         </ul>
