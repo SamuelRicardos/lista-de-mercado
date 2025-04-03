@@ -1,12 +1,18 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useMercadoStore } from "./store/store";
+import { useThemeStore } from "./store/themeStore";
 import ItemLista from "./ItemLista";
-import { Plus } from "lucide-react";
+import { Plus, Sun, Moon } from "lucide-react";
 import "./index.css";
 
 function App() {
   const inputAdicionar = useRef();
   const { listaMercado, adicionarItem } = useMercadoStore();
+  const { theme, toggleTheme } = useThemeStore();
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
 
   const adicionarElementoNaLista = () => {
     const valorInput = inputAdicionar.current.value.trim();
@@ -17,11 +23,30 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col items-center w-full max-w-md gap-6 p-6 bg-white shadow-lg rounded-lg">
-      <h1 className="text-4xl font-bold text-gray-800">Lista de Mercado 🛒</h1>
+    <div className={`flex flex-col items-center w-full max-w-md gap-6 p-6 shadow-lg rounded-lg transition-colors ${
+      theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-800"
+    }`}>
+      <div className="flex justify-between w-full">
+        <h1 className="text-4xl font-bold">Lista de Mercado 🛒</h1>
+        <button
+          onClick={toggleTheme}
+          className={`p-2 rounded-lg transition-colors ${
+            theme === "dark"
+              ? "bg-gray-700 hover:bg-gray-600 text-white"
+              : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+          }`}
+        >
+          {theme === "dark" ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
+      </div>
+
       <div className="relative w-full">
         <input
-          className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className={`w-full p-3 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors ${
+            theme === "dark" 
+              ? "bg-gray-800 text-white border-gray-600 placeholder-gray-400" 
+              : "bg-white text-gray-800 border-gray-300 placeholder-gray-600"
+          }`}
           ref={inputAdicionar}
           type="text"
           placeholder="Digite um item"
@@ -34,20 +59,26 @@ function App() {
           <Plus size={18} />
         </button>
       </div>
-      
+
       {listaMercado.length > 0 ? (
         <ul className="w-full flex flex-col gap-2">
           {listaMercado.map((itemLista, index) => (
             <li 
               key={index}
-              className="flex justify-between items-center bg-gray-100 p-2 rounded-lg shadow-md fade-in"
+              className={`flex justify-between items-center p-2 rounded-lg shadow-md fade-in transition-colors ${
+                theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-100 text-gray-800"
+              }`}
             >
               <ItemLista itemLista={itemLista} />
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-gray-500">Sua lista está vazia. Adicione itens acima!</p>
+        <p className={`transition-colors ${
+          theme === "dark" ? "text-gray-300" : "text-gray-500"
+        }`}>
+          Sua lista está vazia. Adicione itens acima!
+        </p>
       )}
     </div>
   );
