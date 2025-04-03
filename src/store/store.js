@@ -5,20 +5,25 @@ export const useMercadoStore = create(
   persist(
     (set) => ({
       listaMercado: [],
+      historicoCompras: [], // 🆕 Adicionando um estado para o histórico
+
       adicionarItem: (item) =>
         set((state) => ({
           listaMercado: [...state.listaMercado, { ...item, comprado: false }],
         })),
+
       removerItem: (nomeItem) =>
         set((state) => ({
           listaMercado: state.listaMercado.filter((item) => item.nome !== nomeItem),
         })),
+
       atualizarItem: (itemAntigo, itemNovo) =>
         set((state) => ({
           listaMercado: state.listaMercado.map((item) =>
             item.nome === itemAntigo.nome ? { ...item, ...itemNovo } : item
           ),
         })),
+
       alternarComprado: (nomeItem) =>
         set((state) => {
           const novaLista = state.listaMercado.map((item) =>
@@ -26,8 +31,12 @@ export const useMercadoStore = create(
           );
 
           const itemMarcado = novaLista.find((item) => item.nome === nomeItem);
-          
+
           if (itemMarcado && itemMarcado.comprado) {
+            set((state) => ({
+              historicoCompras: [...state.historicoCompras, itemMarcado], // 🆕 Adiciona ao histórico
+            }));
+
             setTimeout(() => {
               set((state) => ({
                 listaMercado: state.listaMercado.filter((item) => item.nome !== nomeItem),

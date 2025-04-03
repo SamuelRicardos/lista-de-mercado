@@ -3,7 +3,7 @@ import { Pencil, Trash2, Check, X } from "lucide-react";
 import { useMercadoStore } from "./store/store";
 import { useThemeStore } from "./store/themeStore";
 
-const ItemLista = ({ itemLista }) => {
+const ItemLista = ({ itemLista, adicionarAoHistorico }) => {
   const { removerItem, atualizarItem, alternarComprado } = useMercadoStore();
   const { theme } = useThemeStore();
   const [editing, setEditing] = useState(false);
@@ -22,6 +22,11 @@ const ItemLista = ({ itemLista }) => {
   const cancelarEdicao = () => {
     setValorEditado(itemLista.nome);
     setEditing(false);
+  };
+
+  const removerElemento = () => {
+    removerItem(itemLista.nome);
+    adicionarAoHistorico(itemLista);
   };
 
   useEffect(() => {
@@ -99,7 +104,7 @@ const ItemLista = ({ itemLista }) => {
           </button>
           <button
             className="transition p-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 shadow-md cursor-pointer"
-            onClick={() => removerItem(itemLista.nome)}
+            onClick={removerElemento}
             aria-label={`Remover ${itemLista.nome} da lista`}
           >
             <Trash2 size={18} />
