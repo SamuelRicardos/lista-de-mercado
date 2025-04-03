@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Pencil, Trash2, Check, X } from "lucide-react";
 import { useMercadoStore } from "./store/store";
+import { useThemeStore } from "./store/themeStore";
 
 const ItemLista = ({ itemLista }) => {
   const { removerItem, atualizarItem } = useMercadoStore();
+  const { theme } = useThemeStore();
   const [editing, setEditing] = useState(false);
   const [valorEditado, setValorEditado] = useState(itemLista);
   const inputRef = useRef(null);
@@ -29,7 +31,9 @@ const ItemLista = ({ itemLista }) => {
   }, [editing]);
 
   return (
-    <div className="flex items-center p-1 rounded-lg w-full gap-3 bg-gray-100">
+    <div className={`flex items-center p-1 rounded-lg w-full gap-3 transition-colors ${
+      theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-100 text-gray-800"
+    }`}>
       {editing ? (
         <input
           ref={inputRef}
@@ -40,11 +44,15 @@ const ItemLista = ({ itemLista }) => {
             if (e.key === "Enter") salvarEdicao();
             else if (e.key === "Escape") cancelarEdicao();
           }}
-          className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className={`flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors ${
+            theme === "dark" 
+              ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400" 
+              : "bg-white text-gray-800 border-gray-300 placeholder-gray-600"
+          }`}
         />
       ) : (
         <span
-          className="text-gray-800 font-medium flex-1 text-left"
+          className="font-medium flex-1 text-left"
           aria-label={`Item da lista: ${itemLista}`}
         >
           {itemLista}
