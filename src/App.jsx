@@ -6,7 +6,8 @@ import { Plus, Sun, Moon } from "lucide-react";
 import "./index.css";
 
 function App() {
-  const inputAdicionar = useRef();
+  const inputNome = useRef();
+  const inputQuantidade = useRef();
   const { listaMercado, adicionarItem } = useMercadoStore();
   const { theme, toggleTheme } = useThemeStore();
 
@@ -15,10 +16,13 @@ function App() {
   }, [theme]);
 
   const adicionarElementoNaLista = () => {
-    const valorInput = inputAdicionar.current.value.trim();
-    if (valorInput && !listaMercado.includes(valorInput)) {
-      adicionarItem(valorInput);
-      inputAdicionar.current.value = "";
+    const nomeItem = inputNome.current.value.trim();
+    const quantidade = parseInt(inputQuantidade.current.value.trim(), 10) || 1;
+
+    if (nomeItem) {
+      adicionarItem({ nome: nomeItem, quantidade });
+      inputNome.current.value = "";
+      inputQuantidade.current.value = "";
     }
   };
 
@@ -27,7 +31,7 @@ function App() {
       theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-800"
     }`}>
       <div className="flex justify-between w-full">
-        <h1 className="text-4xl font-bold">Lista de Mercado 🛒</h1>
+        <h1 className="text-4xl font-bold">Lista de Mercado</h1>
         <button
           onClick={toggleTheme}
           className={`p-2 rounded-lg transition-colors ${
@@ -40,23 +44,34 @@ function App() {
         </button>
       </div>
 
-      <div className="relative w-full">
+      <div className="w-full flex gap-2">
         <input
-          className={`w-full p-3 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors ${
+          className={`flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors ${
             theme === "dark" 
               ? "bg-gray-800 text-white border-gray-600 placeholder-gray-400" 
               : "bg-white text-gray-800 border-gray-300 placeholder-gray-600"
           }`}
-          ref={inputAdicionar}
+          ref={inputNome}
           type="text"
           placeholder="Digite um item"
         />
+        <input
+          className={`w-17 p-3 border rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors ${
+            theme === "dark"
+              ? "bg-gray-800 text-white border-gray-600"
+              : "bg-white text-gray-800 border-gray-300"
+          }`}
+          ref={inputQuantidade}
+          type="number"
+          min="1"
+          placeholder="Qtd"
+        />
         <button
-          className="absolute right-0 top-0 bottom-0 flex items-center justify-center p-2 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-tr-lg rounded-br-lg cursor-pointer"
+          className="p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg"
           onClick={adicionarElementoNaLista}
           aria-label="Adicionar item"
         >
-          <Plus size={18} />
+          <Plus size={20} />
         </button>
       </div>
 
@@ -65,7 +80,7 @@ function App() {
           {listaMercado.map((itemLista, index) => (
             <li 
               key={index}
-              className={`flex justify-between items-center p-2 rounded-lg shadow-md fade-in transition-colors ${
+              className={`flex justify-between items-center p-2 rounded-lg shadow-md transition-colors ${
                 theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-100 text-gray-800"
               }`}
             >
