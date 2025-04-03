@@ -1,41 +1,57 @@
 import { useRef, useState } from "react";
 import ItemLista from "./ItemLista";
+import "./index.css";
 
 function App() {
   const [listaMercado, setListaMercado] = useState([]);
-
   const inputAdicionar = useRef();
 
   const adicionarElementoNaLista = () => {
-    const novaLista = [...listaMercado]
-    const valorInput = inputAdicionar.current.value;
-
-    if (valorInput) {
-      novaLista.push(valorInput)
-      setListaMercado(novaLista)
-
+    const valorInput = inputAdicionar.current.value.trim();
+    if (valorInput && !listaMercado.includes(valorInput)) {
+      setListaMercado([...listaMercado, valorInput]);
       inputAdicionar.current.value = "";
     }
+  };
 
-  }
-
-  return <>
-    <div className="flex flex-col items-center w-full max-w-96 gap-4">
-      <h1 className="text-3xl font-bold">Lista de mercado</h1>
-      <div className="w-full flex gap-2">
-        <input className="w-full rounded-md border border-gray-600 px-2" ref={inputAdicionar} type="text" placeholder="Digite um item" />
-        <button className="transition rounded-md bg-blue-500
-         text-white px-2 cursor-pointer hover:bg-blue-600" onClick={() => adicionarElementoNaLista()}>Adicionar</button>
+  return (
+    <div className="flex flex-col items-center w-full max-w-md gap-6 p-6 bg-white shadow-lg rounded-lg">
+      <h1 className="text-4xl font-bold text-gray-800">Lista de Mercado 🛒</h1>
+      <div className="w-full flex gap-3">
+        <input
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          ref={inputAdicionar}
+          type="text"
+          placeholder="Digite um item"
+        />
+        <button
+          className="transition px-4 py-2 text-white rounded-lg bg-blue-500 hover:bg-blue-600"
+          onClick={adicionarElementoNaLista}
+        >
+          Adicionar
+        </button>
       </div>
 
-      {listaMercado.length > 0 ?
+      {listaMercado.length > 0 ? (
         <ul className="w-full flex flex-col gap-2">
           {listaMercado.map((itemLista, index) => (
-            <ItemLista key={index} itemLista={itemLista} listaMercado={listaMercado} setListaMercado={setListaMercado} />
+            <li 
+              key={index}
+              className="flex justify-between items-center bg-gray-100 p-2 rounded-lg shadow-md fade-in"
+            >
+              <ItemLista
+                itemLista={itemLista}
+                listaMercado={listaMercado}
+                setListaMercado={setListaMercado}
+              />
+            </li>
           ))}
-        </ul> : (<p>Você não tem nenhum item na sua lista</p>)}
+        </ul>
+      ) : (
+        <p className="text-gray-500">Sua lista está vazia. Adicione itens acima!</p>
+      )}
     </div>
-  </>
+  );
 }
 
 export default App;
