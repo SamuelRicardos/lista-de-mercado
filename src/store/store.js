@@ -5,37 +5,38 @@ export const useMercadoStore = create(
   persist(
     (set) => ({
       listaMercado: [],
-
-      adicionarItem: (novoItem) =>
-        set((state) => {
-          const itemExistente = state.listaMercado.find(
-            (item) => item.nome === novoItem.nome
-          );
-
-          if (itemExistente) {
-            return {
-              listaMercado: state.listaMercado.map((item) =>
-                item.nome === novoItem.nome
-                  ? { ...item, quantidade: item.quantidade + novoItem.quantidade }
-                  : item
-              ),
-            };
-          }
-
-          return { listaMercado: [...state.listaMercado, novoItem] };
-        }),
-
+      adicionarItem: (item) =>
+        set((state) => ({
+          listaMercado: [...state.listaMercado, { ...item, comprado: false }],
+        })),
       removerItem: (nomeItem) =>
         set((state) => ({
           listaMercado: state.listaMercado.filter((item) => item.nome !== nomeItem),
         })),
-
-      atualizarItem: (nomeAntigo, itemNovo) =>
+      atualizarItem: (itemAntigo, itemNovo) =>
         set((state) => ({
           listaMercado: state.listaMercado.map((item) =>
-            item.nome === nomeAntigo ? itemNovo : item
+            item.nome === itemAntigo.nome ? { ...item, ...itemNovo } : item
           ),
         })),
+      alternarComprado: (nomeItem) =>
+        set((state) => {
+          const novaLista = state.listaMercado.map((item) =>
+            item.nome === nomeItem ? { ...item, comprado: !item.comprado } : item
+          );
+
+          const itemMarcado = novaLista.find((item) => item.nome === nomeItem);
+          
+          if (itemMarcado && itemMarcado.comprado) {
+            setTimeout(() => {
+              set((state) => ({
+                listaMercado: state.listaMercado.filter((item) => item.nome !== nomeItem),
+              }));
+            }, 3000); // Remove após 3 segundos
+          }
+
+          return { listaMercado: novaLista };
+        }),
     }),
     {
       name: "mercado-storage",
