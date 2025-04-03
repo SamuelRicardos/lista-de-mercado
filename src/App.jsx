@@ -25,7 +25,7 @@ function App() {
           placeholder="Digite um item"
         />
         <button
-          className="transition px-4 py-2 text-white rounded-lg bg-blue-500 hover:bg-blue-600"
+          className="transition px-4 py-2 text-white rounded-lg bg-blue-500 hover:bg-blue-600 cursor-pointer"
           onClick={adicionarElementoNaLista}
         >
           Adicionar
