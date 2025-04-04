@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import { useMercadoStore } from "./store/store";
 import { useThemeStore } from "./store/themeStore";
 import ItemLista from "./ItemLista";
-import { Plus, Sun, Moon, History, X } from "lucide-react";
+import { Plus, Sun, Moon, History, X, Trash } from "lucide-react";
 import "./index.css";
 
 function App() {
@@ -27,13 +27,17 @@ function App() {
     }
   };
 
+  const limparHistorico = () => {
+    useMercadoStore.setState({ historicoCompras: [] });
+  };
+
   return (
     <div
       className={`flex w-full max-w-md flex-col items-center gap-6 rounded-lg p-6 shadow-lg transition-colors ${
         theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-800"
       }`}
     >
-      {/* Cabeçalho */}
+      
       <div className="flex w-full justify-between">
         <h1 className="text-2xl font-bold sm:text-4xl">Lista de Mercado</h1>
         <div className="flex gap-2">
@@ -57,7 +61,7 @@ function App() {
         </div>
       </div>
 
-      {/* Inputs */}
+      
       <div className="flex w-full gap-2">
         <input
           className={`flex-1 rounded-lg border p-3 transition-colors focus:ring-2 focus:ring-blue-400 focus:outline-none ${
@@ -89,7 +93,7 @@ function App() {
         </button>
       </div>
 
-      {/* Lista de Compras */}
+
       {listaMercado.length > 0 ? (
         <ul className="flex w-full flex-col gap-2">
           {listaMercado.map((itemLista, index) => (
@@ -115,7 +119,6 @@ function App() {
         </p>
       )}
 
-      {/* Sidebar do Histórico */}
       {mostrarHistorico && (
         <div
           className={`fixed top-0 right-0 flex h-full w-64 translate-x-0 transform flex-col p-4 shadow-lg transition-transform ${
@@ -133,12 +136,14 @@ function App() {
                   ? "text-white hover:text-red-400"
                   : "text-gray-800 hover:text-red-500"
               }`}
+              aria-label="Fechar histórico"
             >
               <X size={20} />
             </button>
           </div>
+
           {historicoCompras.length > 0 ? (
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-2 pb-16">
               {historicoCompras.map((item, index) => (
                 <li
                   key={index}
@@ -160,6 +165,20 @@ function App() {
             >
               Nenhum item comprado ainda.
             </p>
+          )}
+
+          {historicoCompras.length > 0 && (
+            <button
+              onClick={limparHistorico}
+              className={`absolute right-4 bottom-4 rounded-lg p-3 shadow-lg transition-colors ${
+                theme === "dark"
+                  ? "bg-red-600 text-white hover:bg-red-500"
+                  : "bg-red-500 text-white hover:bg-red-400"
+              }`}
+              aria-label="Limpar histórico"
+            >
+              <Trash size={24} />
+            </button>
           )}
         </div>
       )}
