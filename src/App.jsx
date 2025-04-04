@@ -11,6 +11,7 @@ function App() {
   const { listaMercado, adicionarItem, historicoCompras } = useMercadoStore();
   const { theme, toggleTheme } = useThemeStore();
   const [mostrarHistorico, setMostrarHistorico] = useState(false);
+  const [mostrarModal, setMostrarModal] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -119,69 +120,107 @@ function App() {
         </p>
       )}
 
-      {mostrarHistorico && (
-        <div
-          className={`fixed top-0 right-0 flex h-full w-64 translate-x-0 transform flex-col p-4 shadow-lg transition-transform ${
-            theme === "dark"
-              ? "bg-gray-900 text-white"
-              : "bg-gray-100 text-gray-800"
-          }`}
+{mostrarHistorico && (
+  <div
+    className={`fixed top-0 right-0 flex h-full w-64 translate-x-0 transform flex-col p-4 shadow-lg transition-transform ${
+      theme === "dark"
+        ? "bg-gray-900 text-white"
+        : "bg-gray-100 text-gray-800"
+    }`}
+  >
+    {/* Cabeçalho da Sidebar */} 
+    <div className="mb-4 flex items-center justify-between">
+      <h2 className="text-xl font-semibold">Histórico</h2>
+      {/* Botão de Fechar Sidebar */}
+      <button
+        onClick={() => setMostrarHistorico(false)}
+        className={`rounded-lg p-2 transition-colors ${
+          theme === "dark"
+            ? "text-white hover:text-red-400"
+            : "text-gray-800 hover:text-red-500"
+        }`}
+        aria-label="Fechar histórico"
+      >
+        <X size={20} />
+      </button>
+    </div>
+
+    {/* Lista de Compras do Histórico */}
+    {historicoCompras.length > 0 ? (
+      <ul className="flex flex-col gap-2 pb-16">
+        {historicoCompras.map((item, index) => (
+          <li
+            key={index}
+            className={`rounded-lg p-2 transition-colors ${
+              theme === "dark"
+                ? "bg-gray-800 text-white"
+                : "bg-gray-200 text-gray-800"
+            }`}
+          >
+            {item.nome} ({item.quantidade})
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p
+        className={`transition-colors ${
+          theme === "dark" ? "text-gray-300" : "text-gray-500"
+        }`}
+      >
+        Nenhum item comprado ainda.
+      </p>
+    )}
+
+    {/* Botão de Limpar Histórico no canto inferior direito */}
+    {historicoCompras.length > 0 && (
+      <button
+        onClick={() => setMostrarModal(true)}
+        className={`absolute bottom-4 right-4 rounded-lg p-3 transition-colors shadow-lg ${
+          theme === "dark"
+            ? "bg-red-600 text-white hover:bg-red-500"
+            : "bg-red-500 text-white hover:bg-red-400"
+        }`}
+        aria-label="Limpar histórico"
+      >
+        <Trash size={24} />
+      </button>
+    )}
+  </div>
+)}
+
+{/* Modal de Confirmação */}
+{mostrarModal && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div
+      className={`rounded-lg p-6 shadow-lg ${
+        theme === "dark"
+          ? "bg-gray-800 text-white"
+          : "bg-white text-gray-900"
+      }`}
+    >
+      <h3 className="text-lg font-semibold mb-4">Tem certeza?</h3>
+      <p className="mb-4">Essa ação não pode ser desfeita.</p>
+      <div className="flex justify-end gap-4">
+        <button
+          onClick={() => setMostrarModal(false)}
+          className="px-4 py-2 rounded-lg bg-gray-400 text-white hover:bg-gray-500 transition"
         >
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Histórico</h2>
-            <button
-              onClick={() => setMostrarHistorico(false)}
-              className={`rounded-lg p-2 transition-colors ${
-                theme === "dark"
-                  ? "text-white hover:text-red-400"
-                  : "text-gray-800 hover:text-red-500"
-              }`}
-              aria-label="Fechar histórico"
-            >
-              <X size={20} />
-            </button>
-          </div>
+          Cancelar
+        </button>
+        <button
+          onClick={() => {
+            limparHistorico();
+            setMostrarModal(false);
+          }}
+          className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-500 transition"
+        >
+          Apagar
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
-          {historicoCompras.length > 0 ? (
-            <ul className="flex flex-col gap-2 pb-16">
-              {historicoCompras.map((item, index) => (
-                <li
-                  key={index}
-                  className={`rounded-lg p-2 transition-colors ${
-                    theme === "dark"
-                      ? "bg-gray-800 text-white"
-                      : "bg-gray-200 text-gray-800"
-                  }`}
-                >
-                  {item.nome} ({item.quantidade})
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p
-              className={`transition-colors ${
-                theme === "dark" ? "text-gray-300" : "text-gray-500"
-              }`}
-            >
-              Nenhum item comprado ainda.
-            </p>
-          )}
-
-          {historicoCompras.length > 0 && (
-            <button
-              onClick={limparHistorico}
-              className={`absolute right-4 bottom-4 rounded-lg p-3 shadow-lg transition-colors ${
-                theme === "dark"
-                  ? "bg-red-600 text-white hover:bg-red-500"
-                  : "bg-red-500 text-white hover:bg-red-400"
-              }`}
-              aria-label="Limpar histórico"
-            >
-              <Trash size={24} />
-            </button>
-          )}
-        </div>
-      )}
     </div>
   );
 }
