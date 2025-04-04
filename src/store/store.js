@@ -5,48 +5,56 @@ export const useMercadoStore = create(
   persist(
     (set) => ({
       listaMercado: [],
-      historicoCompras: [], // 🆕 Adicionando um estado para o histórico
+      historicoCompras: [],
 
       adicionarItem: (item) =>
         set((state) => ({
-          listaMercado: [...state.listaMercado, { ...item, comprado: false }],
+          listaMercado: [
+            ...state.listaMercado,
+            {
+              ...item,
+              comprado: false,
+              id: crypto.randomUUID(),
+            },
+          ],
         })),
+      
 
-      removerItem: (nomeItem) =>
-        set((state) => ({
-          listaMercado: state.listaMercado.filter((item) => item.nome !== nomeItem),
-        })),
-
-      atualizarItem: (itemAntigo, itemNovo) =>
-        set((state) => ({
-          listaMercado: state.listaMercado.map((item) =>
-            item.nome === itemAntigo.nome ? { ...item, ...itemNovo } : item
-          ),
-        })),
-
-      alternarComprado: (nomeItem) =>
-        set((state) => {
-          const novaLista = state.listaMercado.map((item) =>
-            item.nome === nomeItem ? { ...item, comprado: !item.comprado } : item
-          );
-
-          const itemMarcado = novaLista.find((item) => item.nome === nomeItem);
-
-          if (itemMarcado && itemMarcado.comprado) {
-            set((state) => ({
-              historicoCompras: [...state.historicoCompras, itemMarcado], // 🆕 Adiciona ao histórico
-            }));
-
-            setTimeout(() => {
+        removerItem: (id) =>
+          set((state) => ({
+            listaMercado: state.listaMercado.filter((item) => item.id !== id),
+          })),
+        
+        atualizarItem: (itemAntigo, itemNovo) =>
+          set((state) => ({
+            listaMercado: state.listaMercado.map((item) =>
+              item.id === itemAntigo.id ? { ...item, ...itemNovo } : item
+            ),
+          })),
+        
+        alternarComprado: (id) =>
+          set((state) => {
+            const novaLista = state.listaMercado.map((item) =>
+              item.id === id ? { ...item, comprado: !item.comprado } : item
+            );
+        
+            const itemMarcado = novaLista.find((item) => item.id === id);
+        
+            if (itemMarcado && itemMarcado.comprado) {
               set((state) => ({
-                listaMercado: state.listaMercado.filter((item) => item.nome !== nomeItem),
+                historicoCompras: [...state.historicoCompras, itemMarcado],
               }));
-            }, 3000); // Remove após 3 segundos
-          }
-
-          return { listaMercado: novaLista };
+        
+              setTimeout(() => {
+                set((state) => ({
+                  listaMercado: state.listaMercado.filter((item) => item.id !== id),
+                }));
+              }, 3000);
+            }
+        
+            return { listaMercado: novaLista };
+          }),
         }),
-    }),
     {
       name: "mercado-storage",
       getStorage: () => localStorage,

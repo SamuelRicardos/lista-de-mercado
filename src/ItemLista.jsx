@@ -25,7 +25,7 @@ const ItemLista = ({ itemLista, adicionarAoHistorico }) => {
   };
 
   const removerElemento = () => {
-    removerItem(itemLista.nome);
+    removerItem(itemLista.id);
     if (typeof adicionarAoHistorico === "function") {
       adicionarAoHistorico(itemLista);
     }
@@ -44,7 +44,7 @@ const ItemLista = ({ itemLista, adicionarAoHistorico }) => {
       <input
         type="checkbox"
         checked={itemLista.comprado}
-        onChange={() => alternarComprado(itemLista.nome)}
+        onChange={() => alternarComprado(itemLista.id)}
         className="h-5 w-5 cursor-pointer accent-green-500"
       />
 
@@ -65,7 +65,7 @@ const ItemLista = ({ itemLista, adicionarAoHistorico }) => {
           <span
             className="flex-1 cursor-pointer text-left font-medium"
             aria-label={`Item da lista: ${itemLista.nome}`}
-            onClick={() => alternarComprado(itemLista.nome)}
+            onClick={() => alternarComprado(itemLista.id)}
           >
             {itemLista.nome} ({itemLista.quantidade})
           </span>
