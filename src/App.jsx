@@ -127,11 +127,9 @@ function App() {
         ? "bg-gray-900 text-white"
         : "bg-gray-100 text-gray-800"
     }`}
-  >
-    {/* Cabeçalho da Sidebar */} 
+  > 
     <div className="mb-4 flex items-center justify-between">
       <h2 className="text-xl font-semibold">Histórico</h2>
-      {/* Botão de Fechar Sidebar */}
       <button
         onClick={() => setMostrarHistorico(false)}
         className={`rounded-lg p-2 transition-colors ${
@@ -145,7 +143,6 @@ function App() {
       </button>
     </div>
 
-    {/* Lista de Compras do Histórico */}
     {historicoCompras.length > 0 ? (
       <ul className="flex flex-col gap-2 pb-16">
         {historicoCompras.map((item, index) => (
@@ -171,7 +168,6 @@ function App() {
       </p>
     )}
 
-    {/* Botão de Limpar Histórico no canto inferior direito */}
     {historicoCompras.length > 0 && (
       <button
         onClick={() => setMostrarModal(true)}
@@ -188,7 +184,6 @@ function App() {
   </div>
 )}
 
-{/* Modal de Confirmação */}
 {mostrarModal && (
   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
     <div
