@@ -37,80 +37,76 @@ const ItemLista = ({ itemLista, adicionarAoHistorico }) => {
 
   return (
     <div
-      className={`flex items-center p-2 rounded-lg w-full gap-3 transition-colors ${
-        theme === "dark"
-          ? "bg-gray-800 text-white"
-          : "bg-gray-100 text-gray-800"
-      } ${itemLista.comprado ? "opacity-50 line-through" : ""}`}
+      className={`flex w-full items-center gap-3 rounded-lg p-2 transition-colors ${theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-100 text-gray-800"} ${itemLista.comprado ? "line-through opacity-50" : ""} flex-wrap`}
     >
       <input
         type="checkbox"
         checked={itemLista.comprado}
         onChange={() => alternarComprado(itemLista.nome)}
-        className="w-5 h-5 cursor-pointer accent-green-500"
+        className="h-5 w-5 cursor-pointer accent-green-500"
       />
 
-      {editing ? (
-        <input
-          ref={inputRef}
-          type="text"
-          value={valorEditado}
-          onChange={(e) => setValorEditado(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") salvarEdicao();
-            else if (e.key === "Escape") cancelarEdicao();
-          }}
-          className={`flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors ${
-            theme === "dark"
-              ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
-              : "bg-white text-gray-800 border-gray-300 placeholder-gray-600"
-          }`}
-        />
-      ) : (
-        <span
-          className="font-medium flex-1 text-left cursor-pointer"
-          aria-label={`Item da lista: ${itemLista.nome}`}
-          onClick={() => alternarComprado(itemLista.nome)}
-        >
-          {itemLista.nome} ({itemLista.quantidade})
-        </span>
-      )}
+      <div className="flex flex-1 items-center justify-between gap-2">
+        {editing ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={valorEditado}
+            onChange={(e) => setValorEditado(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") salvarEdicao();
+              else if (e.key === "Escape") cancelarEdicao();
+            }}
+            className={`rounded-md border p-2 transition-colors focus:ring-2 focus:ring-blue-400 focus:outline-none ${theme === "dark" ? "border-gray-600 bg-gray-700 text-white placeholder-gray-400" : "border-gray-300 bg-white text-gray-800 placeholder-gray-600"} max-w-[380px]:w-[60%] max-w-[360px]:w-[50%] flex-1`}
+          />
+        ) : (
+          <span
+            className="flex-1 cursor-pointer text-left font-medium"
+            aria-label={`Item da lista: ${itemLista.nome}`}
+            onClick={() => alternarComprado(itemLista.nome)}
+          >
+            {itemLista.nome} ({itemLista.quantidade})
+          </span>
+        )}
 
-      {editing ? (
-        <>
-          <button
-            className="transition p-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md cursor-pointer"
-            onClick={salvarEdicao}
-            aria-label={`Salvar ${itemLista.nome} editado`}
-          >
-            <Check size={18} />
-          </button>
-          <button
-            className="transition p-2 text-white bg-gray-500 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 shadow-md cursor-pointer"
-            onClick={cancelarEdicao}
-            aria-label={`Cancelar edição de ${itemLista.nome}`}
-          >
-            <X size={18} />
-          </button>
-        </>
-      ) : (
-        <>
-          <button
-            className="transition p-2 text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 shadow-md cursor-pointer"
-            onClick={iniciarEdicao}
-            aria-label={`Editar ${itemLista.nome} da lista`}
-          >
-            <Pencil size={18} />
-          </button>
-          <button
-            className="transition p-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 shadow-md cursor-pointer"
-            onClick={removerElemento}
-            aria-label={`Remover ${itemLista.nome} da lista`}
-          >
-            <Trash2 size={18} />
-          </button>
-        </>
-      )}
+        <div className="flex gap-1">
+          {editing ? (
+            <>
+              <button
+                className="cursor-pointer rounded-lg bg-blue-500 p-2 text-white shadow-md transition hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                onClick={salvarEdicao}
+                aria-label={`Salvar ${itemLista.nome} editado`}
+              >
+                <Check size={18} />
+              </button>
+              <button
+                className="cursor-pointer rounded-lg bg-gray-500 p-2 text-white shadow-md transition hover:bg-gray-600 focus:ring-2 focus:ring-gray-400 focus:outline-none"
+                onClick={cancelarEdicao}
+                aria-label={`Cancelar edição de ${itemLista.nome}`}
+              >
+                <X size={18} />
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="cursor-pointer rounded-lg bg-green-500 p-2 text-white shadow-md transition hover:bg-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none"
+                onClick={iniciarEdicao}
+                aria-label={`Editar ${itemLista.nome} da lista`}
+              >
+                <Pencil size={18} />
+              </button>
+              <button
+                className="cursor-pointer rounded-lg bg-red-500 p-2 text-white shadow-md transition hover:bg-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none"
+                onClick={removerElemento}
+                aria-label={`Remover ${itemLista.nome} da lista`}
+              >
+                <Trash2 size={18} />
+              </button>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
