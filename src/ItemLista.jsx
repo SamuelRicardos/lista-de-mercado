@@ -26,7 +26,9 @@ const ItemLista = ({ itemLista, adicionarAoHistorico }) => {
 
   const removerElemento = () => {
     removerItem(itemLista.nome);
-    adicionarAoHistorico(itemLista);
+    if (typeof adicionarAoHistorico === "function") {
+      adicionarAoHistorico(itemLista);
+    }
   };
 
   useEffect(() => {
