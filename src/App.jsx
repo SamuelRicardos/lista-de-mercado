@@ -2,7 +2,16 @@ import { useRef, useEffect, useState } from "react";
 import { useMercadoStore } from "./store/store";
 import { useThemeStore } from "./store/themeStore";
 import ItemLista from "./ItemLista";
-import { Plus, Sun, Moon, History, X, Trash } from "lucide-react";
+import {
+  Plus,
+  Sun,
+  Moon,
+  History,
+  X,
+  Trash,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import "./index.css";
 
 function App() {
@@ -110,52 +119,73 @@ function App() {
 
       {listaMercado.length > 0 ? (
         <>
-          <ul className="flex w-full flex-col gap-2">
-            {itensPagina.map((itemLista, index) => (
-              <li
-                key={index}
-                className={`flex items-center justify-between rounded-lg p-2 shadow-md transition-colors ${
-                  theme === "dark"
-                    ? "bg-gray-800 text-white"
-                    : "bg-gray-100 text-gray-800"
-                }`}
-              >
-                <ItemLista itemLista={itemLista} />
-              </li>
-            ))}
-          </ul>
+          <div className="max-h-80 w-full overflow-y-auto">
+            <ul className="flex w-full flex-col gap-2">
+              {itensPagina.map((itemLista, index) => (
+                <li
+                  key={index}
+                  className={`flex items-center justify-between rounded-lg p-2 shadow-md transition-colors ${
+                    theme === "dark"
+                      ? "bg-gray-800 text-white"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  <ItemLista itemLista={itemLista} />
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          {/* Controles de Paginação */}
           {totalPaginas > 1 && (
             <div className="mt-4 flex items-center justify-center gap-2">
               <button
                 onClick={() => irParaPagina(paginaAtual - 1)}
                 disabled={paginaAtual === 1}
-                className="rounded-lg bg-blue-500 px-3 py-1 text-white transition hover:bg-blue-600 disabled:opacity-50"
+                className="rounded-full p-2 text-blue-500 hover:bg-blue-100 disabled:opacity-30 dark:hover:bg-gray-700"
+                aria-label="Página anterior"
               >
-                Anterior
+                <ChevronLeft size={24} />
               </button>
 
-              {Array.from({ length: totalPaginas }, (_, i) => (
-                <button
-                  key={i + 1}
-                  onClick={() => irParaPagina(i + 1)}
-                  className={`rounded-lg px-3 py-1 ${
-                    paginaAtual === i + 1
-                      ? "bg-blue-700 text-white"
-                      : "bg-gray-300 text-gray-800 hover:bg-gray-400"
-                  } transition`}
-                >
-                  {i + 1}
-                </button>
-              ))}
+              {(() => {
+                const maxBotoes = 3;
+                let inicio = Math.max(
+                  1,
+                  paginaAtual - Math.floor(maxBotoes / 2),
+                );
+                let fim = Math.min(totalPaginas, inicio + maxBotoes - 1);
+
+                if (fim - inicio < maxBotoes - 1) {
+                  inicio = Math.max(1, fim - maxBotoes + 1);
+                }
+
+                const botoes = [];
+                for (let i = inicio; i <= fim; i++) {
+                  botoes.push(
+                    <button
+                      key={i}
+                      onClick={() => irParaPagina(i)}
+                      className={`rounded-full px-3 py-1 text-sm transition ${
+                        paginaAtual === i
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+                      }`}
+                    >
+                      {i}
+                    </button>,
+                  );
+                }
+
+                return botoes;
+              })()}
 
               <button
                 onClick={() => irParaPagina(paginaAtual + 1)}
                 disabled={paginaAtual === totalPaginas}
-                className="rounded-lg bg-blue-500 px-3 py-1 text-white transition hover:bg-blue-600 disabled:opacity-50"
+                className="rounded-full p-2 text-blue-500 hover:bg-blue-100 disabled:opacity-30 dark:hover:bg-gray-700"
+                aria-label="Próxima página"
               >
-                Próxima
+                <ChevronRight size={24} />
               </button>
             </div>
           )}
