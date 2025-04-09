@@ -141,7 +141,11 @@ function App() {
               <button
                 onClick={() => irParaPagina(paginaAtual - 1)}
                 disabled={paginaAtual === 1}
-                className="rounded-full p-2 text-blue-500 hover:bg-blue-100 disabled:opacity-30 dark:hover:bg-gray-700"
+                className={`rounded-full p-2 transition disabled:opacity-30 ${
+                  theme === "dark"
+                    ? "text-blue-400 hover:bg-gray-700"
+                    : "text-blue-600 hover:bg-blue-100"
+                }`}
                 aria-label="Página anterior"
               >
                 <ChevronLeft size={24} />
@@ -165,10 +169,12 @@ function App() {
                     <button
                       key={i}
                       onClick={() => irParaPagina(i)}
-                      className={`rounded-full px-3 py-1 text-sm transition ${
+                      className={`rounded-full px-3 py-1 text-sm font-medium transition ${
                         paginaAtual === i
                           ? "bg-blue-600 text-white"
-                          : "bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+                          : theme === "dark"
+                            ? "bg-gray-700 text-white hover:bg-gray-600"
+                            : "bg-gray-200 text-gray-800 hover:bg-gray-300"
                       }`}
                     >
                       {i}
@@ -182,7 +188,11 @@ function App() {
               <button
                 onClick={() => irParaPagina(paginaAtual + 1)}
                 disabled={paginaAtual === totalPaginas}
-                className="rounded-full p-2 text-blue-500 hover:bg-blue-100 disabled:opacity-30 dark:hover:bg-gray-700"
+                className={`rounded-full p-2 transition disabled:opacity-30 ${
+                  theme === "dark"
+                    ? "text-blue-400 hover:bg-gray-700"
+                    : "text-blue-600 hover:bg-blue-100"
+                }`}
                 aria-label="Próxima página"
               >
                 <ChevronRight size={24} />
