@@ -12,13 +12,14 @@ A ideia foi criar uma lista de compras simples, onde o usuário pode adicionar, 
 
 ## ✨ Funcionalidades
 
+- Ler itens da lista
 - Adicionar novos itens à lista;
-- Marcar itens como comprados;
 - Remover itens da lista;
 - Alterar itens da lista;
+- Marcar itens como comprados;
 - Persistência de dados no localStorage.
 - Alternar entre o modo claro/escuro.
-- Histórico das compras
+- Histórico dos itens comprados
 
 ---
 
