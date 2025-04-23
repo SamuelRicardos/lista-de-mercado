@@ -129,9 +129,9 @@ function App() {
         <>
           <div className="max-h-80 w-full overflow-y-auto">
             <ul className="flex w-full flex-col gap-2">
-              {itensPagina.map((itemLista, index) => (
+              {itensPagina.map((itemLista) => (
                 <li
-                  key={index}
+                  key={itemLista.id}
                   className={`flex items-center justify-between rounded-lg p-2 shadow-md transition-colors ${
                     theme === "dark"
                       ? "bg-gray-800 text-white"
