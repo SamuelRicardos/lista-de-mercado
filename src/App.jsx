@@ -26,6 +26,7 @@ function App() {
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
 
+
   const adicionarElementoNaLista = () => {
     const nomeItem = inputNome.current.value.trim();
     const quantidade = parseInt(inputQuantidade.current.value.trim(), 10) || 1;
@@ -56,6 +57,13 @@ function App() {
       setPaginaAtual(pagina);
     }
   };
+
+  useEffect(() => {
+    const novaTotalPaginas = Math.ceil(listaMercado.length / itensPorPagina);
+    if (paginaAtual > novaTotalPaginas) {
+      setPaginaAtual(novaTotalPaginas > 0 ? novaTotalPaginas : 1);
+    }
+  }, [listaMercado, itensPorPagina, paginaAtual]);
 
   return (
     <div
